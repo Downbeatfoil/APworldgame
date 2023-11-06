@@ -37,8 +37,8 @@ playercannonballs = []
 cannonball_speed = 8
 count = 0
 
-enemyspeed = -2
-enemyspeedp = 2
+enemyspeed = -5
+enemyspeedp = 5
 
 
 
@@ -122,7 +122,7 @@ while True:
             
             screen.blit(cannonball_surface, playercannonball_rect)
 
-        hardness = 2
+        hardness = 8
         if random.randint(1, 100) < hardness:
             cannonball_rect = cannonball_surface.get_rect(midtop=(enemy_rect.midbottom[0], enemy_rect.midbottom[1] + 5))
             cannonballs.append(cannonball_rect)
@@ -154,6 +154,8 @@ while True:
     else:
         if lose: 
             screen.fill('Red')
+            cannonballs = []
+            playercannonballs = []
         else: 
             screen.fill('Green')
             kabir += 1
