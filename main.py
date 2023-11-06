@@ -35,6 +35,7 @@ game_active = True
 cannonballs = []
 playercannonballs = []
 cannonball_speed = 5
+count = 0
 
 
 
@@ -127,6 +128,7 @@ while True:
         if random.randint(1, 100) < hardness:
             cannonball_rect = cannonball_surface.get_rect(midtop=(enemy_rect.midbottom[0], enemy_rect.midbottom[1] + 5))
             cannonballs.append(cannonball_rect)
+            count += 1
 
         # Update and draw cannonballs
         for cannonball_rect in cannonballs:
@@ -153,6 +155,7 @@ while True:
             screen.fill('Red')
         else: 
             screen.fill('Green')
+        print(count)
 
 
 
