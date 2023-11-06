@@ -14,10 +14,10 @@ clock = pygame.time.Clock()
 # Set up the game window
 screen = pygame.display.set_mode((500, 600))
 
-ocean_surface = pygame.image.load('graphics/ocean.png.jpg').convert()
+ocean_surface = pygame.image.load('graphics/oceanpixel-transformed.jpeg').convert()
 ocean_surface = pygame.transform.scale(ocean_surface, (500, 600))
 
-enemy_surface = pygame.image.load('graphics/Pirate-ship.webp').convert_alpha()
+enemy_surface = pygame.image.load('graphics/piratereal.png').convert_alpha()
 enemy_surface = pygame.transform.scale(enemy_surface, (100, 58))
 enemy_rect = enemy_surface.get_rect(midtop = (250, 42))
 enemy_direction = 2
@@ -25,8 +25,8 @@ enemy_direction = 2
 cannonball_surface = pygame.image.load('graphics/cannonball.png').convert_alpha()
 cannonball_surface = pygame.transform.scale(cannonball_surface, (25, 25))
 
-player_surface = pygame.image.load('graphics/historicalship.png.jpg').convert_alpha()
-player_surface = pygame.transform.scale(player_surface, (101, 59))
+player_surface = pygame.image.load('graphics/historyship.png').convert_alpha()
+player_surface = pygame.transform.scale(player_surface, (68, 85))
 player_rect = player_surface.get_rect(midbottom=(250, 550))  
 
 game_active = True
@@ -37,8 +37,8 @@ playercannonballs = []
 cannonball_speed = 8
 count = 0
 
-enemyspeed = -5
-enemyspeedp = 5
+enemyspeed = -2
+enemyspeedp = 2
 
 
 
@@ -156,11 +156,14 @@ while True:
             screen.fill('Red')
             cannonballs = []
             playercannonballs = []
+            count = 0
         else: 
             screen.fill('Green')
             kabir += 1
             if kabir < 2:
                 print(count)
+            cannonballs = []
+            playercannonballs = []
 
 
 
