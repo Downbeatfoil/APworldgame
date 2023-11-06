@@ -20,7 +20,7 @@ ocean_surface = pygame.transform.scale(ocean_surface, (500, 600))
 enemy_surface = pygame.image.load('graphics/Pirate-ship.webp').convert_alpha()
 enemy_surface = pygame.transform.scale(enemy_surface, (100, 58))
 enemy_rect = enemy_surface.get_rect(midtop = (250, 42))
-enemy_direction = 1
+enemy_direction = 2
 
 cannonball_surface = pygame.image.load('graphics/cannonball.png').convert_alpha()
 cannonball_surface = pygame.transform.scale(cannonball_surface, (25, 25))
@@ -37,6 +37,8 @@ playercannonballs = []
 cannonball_speed = 5
 count = 0
 
+enemyspeed = -2
+enemyspeedp = 2
 
 
 
@@ -69,14 +71,14 @@ while True:
                 elif event.key == pygame.K_RIGHT:
                     move_right = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and player_can_shoot:
-                print("Space key pressed")
                 playercannonball_rect = cannonball_surface.get_rect(midbottom=(player_rect.midtop[0], player_rect.midtop[1] - 5))
                 playercannonballs.append(playercannonball_rect)
-                if not player_can_shoot:
-                    cooldown_timer += 1
-                    if cooldown_timer >= cannonball_cooldown:
-                        player_can_shoot = True
-                        cooldown_timer = 0
+                player_can_shoot = False
+            if not player_can_shoot:
+                cooldown_timer += 1
+                if cooldown_timer >= cannonball_cooldown:
+                    player_can_shoot = True
+                    cooldown_timer = 120
 
 
 
@@ -99,9 +101,9 @@ while True:
 
         # Check if the enemy is out of bounds and change its direction
         if enemy_rect.right > 500:
-            enemy_direction = -1
+            enemy_direction = enemyspeed
         elif enemy_rect.left < 0:
-            enemy_direction = 1
+            enemy_direction = enemyspeedp
 
         screen.blit(enemy_surface, enemy_rect)
         screen.blit(player_surface, player_rect)
@@ -119,9 +121,8 @@ while True:
                 playercannonballs.remove(playercannonball_rect)
                 move_left = False
                 move_right = False
-                screen.fill('Green')
                 game_active = False
-
+                kabir = 0
             screen.blit(cannonball_surface, playercannonball_rect)
 
         hardness = 6
@@ -155,7 +156,9 @@ while True:
             screen.fill('Red')
         else: 
             screen.fill('Green')
-        print(count)
+            kabir += 1
+            if kabir < 2:
+                print(count)
 
 
 
