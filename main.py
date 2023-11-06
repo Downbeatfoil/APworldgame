@@ -27,14 +27,14 @@ cannonball_surface = pygame.transform.scale(cannonball_surface, (25, 25))
 
 player_surface = pygame.image.load('graphics/historicalship.png.jpg').convert_alpha()
 player_surface = pygame.transform.scale(player_surface, (101, 59))
-player_rect = player_surface.get_rect(midbottom=(250, 550))
+player_rect = player_surface.get_rect(midbottom=(250, 550))  
 
 game_active = True
 
 
 cannonballs = []
 playercannonballs = []
-cannonball_speed = 5
+cannonball_speed = 8
 count = 0
 
 enemyspeed = -2
@@ -74,11 +74,8 @@ while True:
                 playercannonball_rect = cannonball_surface.get_rect(midbottom=(player_rect.midtop[0], player_rect.midtop[1] - 5))
                 playercannonballs.append(playercannonball_rect)
                 player_can_shoot = False
-            if not player_can_shoot:
-                cooldown_timer += 1
-                if cooldown_timer >= cannonball_cooldown:
-                    player_can_shoot = True
-                    cooldown_timer = 120
+            if len(playercannonballs) == 0:
+                player_can_shoot = True
 
 
 
@@ -113,9 +110,8 @@ while True:
 
         for playercannonball_rect in playercannonballs:
             playercannonball_rect.y -= cannonball_speed  # Change to -= to move upwards
-
             if playercannonball_rect.bottom < 0:
-                playercannonballs.remove(playercannonball_rect)  # Remove when it goes above the screen
+                playercannonballs.pop(0)  # Remove when it goes above the screen
 
             if playercannonball_rect.colliderect(enemy_rect):
                 playercannonballs.remove(playercannonball_rect)
@@ -123,17 +119,21 @@ while True:
                 move_right = False
                 game_active = False
                 kabir = 0
+            
             screen.blit(cannonball_surface, playercannonball_rect)
 
-        hardness = 6
+        hardness = 2
         if random.randint(1, 100) < hardness:
             cannonball_rect = cannonball_surface.get_rect(midtop=(enemy_rect.midbottom[0], enemy_rect.midbottom[1] + 5))
             cannonballs.append(cannonball_rect)
             count += 1
-
         # Update and draw cannonballs
         for cannonball_rect in cannonballs:
             cannonball_rect.y += cannonball_speed
+
+            if len(playercannonballs) == 1 and playercannonball_rect.colliderect(cannonball_rect):
+                playercannonballs.remove(playercannonball_rect)
+                cannonballs.remove(cannonball_rect)
 
             if cannonball_rect.colliderect(player_rect):
                 cannonballs.remove(cannonball_rect)
@@ -166,6 +166,6 @@ while True:
 
 
     
-    clock.tick(60)
+    clock.tick(50)
 
 
