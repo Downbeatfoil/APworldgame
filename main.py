@@ -20,7 +20,8 @@ ocean_surface = pygame.transform.scale(ocean_surface, (500, 600))
 enemy_surface = pygame.image.load('graphics/piratereal.png').convert_alpha()
 enemy_surface = pygame.transform.scale(enemy_surface, (100, 58))
 enemy_rect = enemy_surface.get_rect(midtop = (250, 42))
-enemy_direction = 2
+enemy_surface = pygame.transform.flip(enemy_surface, True, False)
+
 
 cannonball_surface = pygame.image.load('graphics/cannonball.png').convert_alpha()
 cannonball_surface = pygame.transform.scale(cannonball_surface, (25, 25))
@@ -34,15 +35,19 @@ game_active = True
 
 cannonballs = []
 playercannonballs = []
-cannonball_speed = 8
 count = 0
 
-enemyspeed = -2
-enemyspeedp = 2
+enemyspeed = -4
+enemyspeedp = 4
+enemy_direction = 4
+hardness = 5
+player_speed = 15
+cannonball_speed = 8
 
 
 
-player_speed = 8
+
+
 move_left = False
 move_right = False
 player_can_shoot = True
@@ -98,8 +103,10 @@ while True:
 
         # Check if the enemy is out of bounds and change its direction
         if enemy_rect.right > 500:
+            enemy_surface = pygame.transform.flip(enemy_surface, True, False)
             enemy_direction = enemyspeed
         elif enemy_rect.left < 0:
+            enemy_surface = pygame.transform.flip(enemy_surface, True, False)
             enemy_direction = enemyspeedp
 
         screen.blit(enemy_surface, enemy_rect)
@@ -122,7 +129,6 @@ while True:
             
             screen.blit(cannonball_surface, playercannonball_rect)
 
-        hardness = 8
         if random.randint(1, 100) < hardness:
             cannonball_rect = cannonball_surface.get_rect(midtop=(enemy_rect.midbottom[0], enemy_rect.midbottom[1] + 5))
             cannonballs.append(cannonball_rect)
@@ -171,6 +177,6 @@ while True:
 
 
     
-    clock.tick(50)
+    clock.tick(60)
 
 
