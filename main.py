@@ -29,6 +29,13 @@ cannonball_surface = pygame.transform.scale(cannonball_surface, (25, 25))
 player_surface = pygame.image.load('graphics/historyship.png').convert_alpha()
 player_surface = pygame.transform.scale(player_surface, (68, 85))
 player_rect = player_surface.get_rect(midbottom=(250, 550))  
+shoot_sound = pygame.mixer.Sound('audio\cannon-fire-161072-[AudioTrimmer.com].mp3')
+shoot_sound.set_volume(.08)
+
+bg_music = pygame.mixer.Sound('audio/battle-ship-111902.mp3')
+bg_music.play(loops = -1)
+bg_music.set_volume(.6)
+
 
 game_active = True
 
@@ -37,10 +44,10 @@ cannonballs = []
 playercannonballs = []
 count = 0
 
-enemyspeed = -4
-enemyspeedp = 4
-enemy_direction = 4
-hardness = 5
+enemyspeed = -8
+enemyspeedp = 8
+enemy_direction = 8
+hardness = 10
 player_speed = 15
 cannonball_speed = 8
 
@@ -77,6 +84,7 @@ while True:
                     move_right = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and player_can_shoot:
                 playercannonball_rect = cannonball_surface.get_rect(midbottom=(player_rect.midtop[0], player_rect.midtop[1] - 5))
+                shoot_sound.play()
                 playercannonballs.append(playercannonball_rect)
                 player_can_shoot = False
             if len(playercannonballs) == 0:
@@ -132,6 +140,7 @@ while True:
         if random.randint(1, 100) < hardness:
             cannonball_rect = cannonball_surface.get_rect(midtop=(enemy_rect.midbottom[0], enemy_rect.midbottom[1] + 5))
             cannonballs.append(cannonball_rect)
+            shoot_sound.play()
             count += 1
         # Update and draw cannonballs
         for cannonball_rect in cannonballs:
