@@ -47,7 +47,7 @@ count = 0
 enemyspeed = -8
 enemyspeedp = 8
 enemy_direction = 8
-hardness = 10
+hardness = 5
 player_speed = 15
 cannonball_speed = 8
 
@@ -133,7 +133,6 @@ while True:
                 move_left = False
                 move_right = False
                 game_active = False
-                kabir = 0
             
             screen.blit(cannonball_surface, playercannonball_rect)
 
@@ -156,6 +155,8 @@ while True:
                 move_right = False
                 lose = True
                 game_active = False
+                kabir = 0
+
 
             # Remove cannonball when it leaves the screen
             if cannonball_rect.top > 600:
@@ -171,12 +172,12 @@ while True:
             screen.fill('Red')
             cannonballs = []
             playercannonballs = []
-            count = 0
-        else: 
-            screen.fill('Green')
             kabir += 1
             if kabir < 2:
                 print(count)
+            count = 0
+        else: 
+            screen.fill('Green')
             cannonballs = []
             playercannonballs = []
 
