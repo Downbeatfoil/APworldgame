@@ -1,13 +1,37 @@
 import pygame
 from sys import exit
 import random
+duration = 105000
+
+def get_color(score):
+    if score >= 90:
+        return (0, 255, 0)  # Green
+    elif 70 <= score < 90:
+        return (255, 165, 0)  # Orange/Yellow
+    else:
+        return (255, 0, 0)  # Red
+
+def displayscore():
+        pygame.draw.rect(screen, (0, 0, 0), (200, 0, 100, 30))
+        currenttime = duration - ((pygame.time.get_ticks()) -starttime)
+        score_percent = (currenttime / 100000 * 100)
+        score_percent = round(score_percent)
+        
+        if (pygame.time.get_ticks() - starttime) > 5000:
+            score_surf = test_font.render(f'{score_percent}%', True, get_color(score_percent))
+            score_rect = score_surf.get_rect(center=(250, 20))
+            screen.blit(score_surf, score_rect)
+        else:
+            score_surf = test_font.render('100%', True, get_color(100))
+            score_rect = score_surf.get_rect(center=(250, 20))
+            screen.blit(score_surf, score_rect)
 
 
 # Initialize Pygame
 pygame.init()
 pygame.display.set_caption('APWorldGame')
 clock = pygame.time.Clock()
-
+starttime = 0
 
 
 
@@ -22,6 +46,7 @@ enemy_surface = pygame.transform.scale(enemy_surface, (100, 58))
 enemy_rect = enemy_surface.get_rect(midtop = (250, 42))
 enemy_surface = pygame.transform.flip(enemy_surface, True, False)
 
+test_font = pygame.font.Font('fonts/Pixeltype.ttf', 50)
 
 cannonball_surface = pygame.image.load('graphics/cannonball.png').convert_alpha()
 cannonball_surface = pygame.transform.scale(cannonball_surface, (25, 25))
@@ -95,8 +120,10 @@ while True:
         else: 
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_5):
                 game_active = True
+                starttime = pygame.time.get_ticks() 
     
     if game_active:
+        displayscore()
         lose = False
         # Update player's position based on the movement flags
         if move_left:
@@ -187,6 +214,6 @@ while True:
 
 
     
-    clock.tick(60)
+    clock.tick(30)
 
 
