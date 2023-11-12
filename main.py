@@ -26,6 +26,31 @@ def displayscore():
             score_rect = score_surf.get_rect(center=(250, 20))
             screen.blit(score_surf, score_rect)
 
+def display_restart_screen():
+    screen.fill('Red')
+    pygame.draw.rect(screen, (0, 0, 0), (85, 370, 330, 50))
+    screen.blit(start_text, start_rect)
+
+    pygame.draw.rect(screen, (0, 0, 0), (0, 0, 250, 260))
+
+    money_text = test_font.render(f"Money: {player_money}", True, (255, 255, 255))
+    sails_text = test_font.render(f"Sails: {num_sails}", True, (255, 255, 255))
+    speed_text = test_font.render(f"Speed: {player_speed}", True, (255, 255, 255))
+    astrolabe_text = test_font.render(f"Astrolabe: {'Yes' if has_astrolabe else 'No'}", True, (255, 255, 255))
+    compass_text = test_font.render(f"Compass: {'Yes' if has_compass else 'No'}", True, (255, 255, 255))
+    map_text = test_font.render(f"Map: {'Yes' if has_map else 'No'}", True, (255, 255, 255))
+
+
+
+    screen.blit(money_text, (10, 10))
+    screen.blit(sails_text, (10, 50))
+    screen.blit(speed_text, (10, 90))
+    screen.blit(astrolabe_text, (10, 130))
+    screen.blit(compass_text, (10, 170))
+    screen.blit(map_text, (10, 210))
+
+    pygame.display.flip()
+
 
 # Initialize Pygame
 pygame.init()
@@ -38,6 +63,11 @@ starttime = 0
 # Set up the game window
 screen = pygame.display.set_mode((500, 600))
 
+test_font = pygame.font.Font('fonts/Pixeltype.ttf', 50)
+
+start_text = test_font.render("Press 'S' to start", True, (255, 255, 255))
+start_rect = start_text.get_rect(center=(250, 400))
+
 ocean_surface = pygame.image.load('graphics/oceanpixel-transformed.jpeg').convert()
 ocean_surface = pygame.transform.scale(ocean_surface, (500, 600))
 
@@ -46,7 +76,6 @@ enemy_surface = pygame.transform.scale(enemy_surface, (100, 58))
 enemy_rect = enemy_surface.get_rect(midtop = (250, 42))
 enemy_surface = pygame.transform.flip(enemy_surface, True, False)
 
-test_font = pygame.font.Font('fonts/Pixeltype.ttf', 50)
 
 cannonball_surface = pygame.image.load('graphics/cannonball.png').convert_alpha()
 cannonball_surface = pygame.transform.scale(cannonball_surface, (25, 25))
@@ -62,22 +91,27 @@ bg_music.play(loops = -1)
 bg_music.set_volume(.6)
 
 
-game_active = True
+game_active = False
 
 
 cannonballs = []
 playercannonballs = []
 count = 0
 
+num_sails = 1
+player_money = 100
 enemyspeed = -8
 enemyspeedp = 8
 enemy_direction = 8
 hardness = 5
-player_speed = 15
+player_speed = 5
 cannonball_speed = 8
+has_astrolabe = False
+has_compass = False
+has_map = False
 
 
-
+show_start_screen = True
 
 
 move_left = False
@@ -89,14 +123,12 @@ cooldown_timer = 0  # Initialize the cooldown timer to 0
 # Game loop
 while True:
     screen.blit(ocean_surface, (0, 0))
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
 
         if game_active:
-
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     move_left = True
@@ -118,13 +150,35 @@ while True:
 
 
         else: 
-            if (event.type == pygame.KEYDOWN and event.key == pygame.K_5):
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    # User pressed the "1" key
+                    if player_money >= 10:  # Assuming the cost to subtract is 10 money units
+                        player_money -= 10
+                        num_sails += 1
+                        player_speed += 3
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_2:
+                   has_astrolabe = True
+                   player_money -= 10
+                   
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_3:
+                   has_compass = True
+                   player_money -= 10
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_4:
+                   has_map = True
+                   player_money -= 10
+
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_s):
                 game_active = True
                 starttime = pygame.time.get_ticks() 
     
     if game_active:
         displayscore()
-        lose = False
         # Update player's position based on the movement flags
         if move_left:
             player_rect.x -= player_speed
@@ -147,8 +201,6 @@ while True:
         screen.blit(enemy_surface, enemy_rect)
         screen.blit(player_surface, player_rect)
 
-        screen.blit(enemy_surface, enemy_rect)
-        screen.blit(player_surface, player_rect)
 
         for playercannonball_rect in playercannonballs:
             playercannonball_rect.y -= cannonball_speed  # Change to -= to move upwards
@@ -180,7 +232,6 @@ while True:
                 cannonballs.remove(cannonball_rect)
                 move_left = False
                 move_right = False
-                lose = True
                 game_active = False
                 kabir = 0
 
@@ -195,19 +246,10 @@ while True:
 
 
     else:
-        if lose: 
-            screen.fill('Red')
-            cannonballs = []
-            playercannonballs = []
-            kabir += 1
-            if kabir < 2:
-                print(count)
-            count = 0
-        else: 
-            screen.fill('Green')
-            cannonballs = []
-            playercannonballs = []
-
+        display_restart_screen()
+        cannonballs = []
+        playercannonballs = []
+            
 
 
     pygame.display.update()
