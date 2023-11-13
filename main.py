@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 import random
+from statistics import mean 
 duration = 105000
 
 def get_color(score):
@@ -14,9 +15,9 @@ def get_color(score):
 def displayscore():
         pygame.draw.rect(screen, (0, 0, 0), (200, 0, 100, 30))
         currenttime = duration - ((pygame.time.get_ticks()) -starttime)
+        global score_percent
         score_percent = (currenttime / 100000 * 100)
         score_percent = round(score_percent)
-        
         if (pygame.time.get_ticks() - starttime) > 5000:
             score_surf = test_font.render(f'{score_percent}%', True, get_color(score_percent))
             score_rect = score_surf.get_rect(center=(250, 20))
@@ -31,16 +32,19 @@ def display_restart_screen():
     pygame.draw.rect(screen, (0, 0, 0), (85, 370, 330, 50))
     screen.blit(start_text, start_rect)
 
-    pygame.draw.rect(screen, (0, 0, 0), (0, 0, 250, 260))
+    pygame.draw.rect(screen, (0, 0, 0), (0, 0, 350, 340))
 
-    money_text = test_font.render(f"Money: {player_money}", True, (255, 255, 255))
+    money_text = test_font.render(f"Doubloons: {player_money}", True, (255, 255, 255))
     sails_text = test_font.render(f"Sails: {num_sails}", True, (255, 255, 255))
     speed_text = test_font.render(f"Speed: {player_speed}", True, (255, 255, 255))
     astrolabe_text = test_font.render(f"Astrolabe: {'Yes' if has_astrolabe else 'No'}", True, (255, 255, 255))
     compass_text = test_font.render(f"Compass: {'Yes' if has_compass else 'No'}", True, (255, 255, 255))
     map_text = test_font.render(f"Map: {'Yes' if has_map else 'No'}", True, (255, 255, 255))
-
-
+    cbspeed_text = test_font.render(f"Gunpowder Quality: {player_cannonball_speed}", True, (255, 255, 255))
+    hull_text = test_font.render(f"Hull Thickness: {hull_thickness}", True, (255, 255, 255))
+    global current_level, level_scores
+    current_level = 1
+    level_scores = []
 
     screen.blit(money_text, (10, 10))
     screen.blit(sails_text, (10, 50))
@@ -48,17 +52,187 @@ def display_restart_screen():
     screen.blit(astrolabe_text, (10, 130))
     screen.blit(compass_text, (10, 170))
     screen.blit(map_text, (10, 210))
+    screen.blit(cbspeed_text,(10, 250))
+    screen.blit(hull_text,(10, 290))
 
     pygame.display.flip()
 
+def display_level_complete_screen(astrolabe, compass, map):
+    screen.fill('Blue')  # You can use a different color or background image
+    if check_get_lost(astrolabe, compass, map):
+        display_lost_message(astrolabe, compass, map)
+    else: 
+        level_complete_text = test_font.render(f"Get Ready For Level {current_level}", True, (255, 255, 255))
+        level_complete_rect = level_complete_text.get_rect(center=(250, 100))
+        screen.blit(level_complete_text, level_complete_rect)
+        level_scores = [] 
+        if current_level ==2:
+            pirate_text = test_font.render(
+            "You will fight Captain Kidd",
+            True,
+            (255, 255, 255)
+            )
+
+            pirate_rect = pirate_text.get_rect(center=(250, 250))
+            screen.blit(pirate_text, pirate_rect)
+
+            # Load and display the pirate image
+            pirate_image = pygame.image.load('graphics\john-calico-jack-rackham-1680-1720-print-collector.jpg').convert_alpha()
+            pirate_image = pygame.transform.scale(pirate_image, (150, 250))
+            pirate_rect = pirate_image.get_rect(center=(250, 420))
+            screen.blit(pirate_image, pirate_rect)
+
+            pygame.display.flip()
+
+            # Add a delay to show the start screen for a moment
+            pygame.time.delay(5000)  # Adjust the delay time as needed
+            global starttime
+            starttime = pygame.time.get_ticks() 
+            # Reset necessary variables for the next level
+            reset_game_state()
+        if current_level ==3:
+            pirate_text = test_font.render(
+            "You will fight Blackbeard",
+            True,
+            (255, 255, 255)
+            )
+
+            pirate_rect = pirate_text.get_rect(center=(250, 250))
+            screen.blit(pirate_text, pirate_rect)
+
+            # Load and display the pirate image
+            pirate_image = pygame.image.load('graphics\john-calico-jack-rackham-1680-1720-print-collector.jpg').convert_alpha()
+            pirate_image = pygame.transform.scale(pirate_image, (150, 250))
+            pirate_rect = pirate_image.get_rect(center=(250, 420))
+            screen.blit(pirate_image, pirate_rect)
+
+            pygame.display.flip()
+
+            # Add a delay to show the start screen for a moment
+            pygame.time.delay(5000)  # Adjust the delay time as needed
+
+            starttime = pygame.time.get_ticks() 
+            # Reset necessary variables for the next level
+            reset_game_state()
+        if current_level ==4:
+            pirate_text = test_font.render(
+            "You will fight Shiv Garg",
+            True,
+            (255, 255, 255)
+            )
+
+            pirate_rect = pirate_text.get_rect(center=(250, 250))
+            screen.blit(pirate_text, pirate_rect)
+
+            # Load and display the pirate image
+            pirate_image = pygame.image.load('graphics\john-calico-jack-rackham-1680-1720-print-collector.jpg').convert_alpha()
+            pirate_image = pygame.transform.scale(pirate_image, (150, 250))
+            pirate_rect = pirate_image.get_rect(center=(250, 420))
+            screen.blit(pirate_image, pirate_rect)
+
+            pygame.display.flip()
+
+            # Add a delay to show the start screen for a moment
+            pygame.time.delay(5000)  # Adjust the delay time as needed
+            starttime = pygame.time.get_ticks() 
+            # Reset necessary variables for the next level
+            reset_game_state()
+        if current_level == 5:
+            pirate_text = test_font.render(
+            "You Won!",
+            True,
+            (255, 255, 255)
+            )
+            pirate_rect = pirate_text.get_rect(center=(250, 250))
+            screen.blit(pirate_text, pirate_rect)
+            avgscore = mean(level_scores)
+            avg_text = test_font.render(f"Average Score: {avgscore}", True, (255, 255, 255))
+            avg_rect = avg_text.get_rect(center=(250, 300))
+            screen.blit(avg_text, avg_rect)
+
+            pygame.display.flip()
+
+
+def displaystart():
+    screen.fill((0, 0, 255))  # Change the background color to blue
+    start_text = test_font.render("Get ready for level 1", True, (255, 255, 255))
+    start_rect = start_text.get_rect(center=(250, 100))
+    screen.blit(start_text, start_rect)
+
+    # Display additional text
+    pirate_text = test_font.render(
+    "You will fight Calico Jack",
+    True,
+    (255, 255, 255)
+    )
+
+    pirate_rect = pirate_text.get_rect(center=(250, 250))
+    screen.blit(pirate_text, pirate_rect)
+
+    # Load and display the pirate image
+    pirate_image = pygame.image.load('graphics\john-calico-jack-rackham-1680-1720-print-collector.jpg').convert_alpha()
+    pirate_image = pygame.transform.scale(pirate_image, (150, 250))
+    pirate_rect = pirate_image.get_rect(center=(250, 420))
+    screen.blit(pirate_image, pirate_rect)
+
+    pygame.display.flip()
+
+    # Add a delay to show the start screen for a moment
+    pygame.time.delay(5000)  # Adjust the delay time as needed
+    
+
+def reset_game_state():
+    global game_active, hit, cannonballs, playercannonballs
+    hit = 0
+    cannonballs = []
+    playercannonballs = []
+    game_active = True
+
+def calculate_get_lost_chance(astrolabe, compass, map):
+    total_tools = astrolabe + compass + map
+    if total_tools == 0:
+        return 60
+    elif total_tools == 1:
+        return 35
+    elif total_tools == 2:
+        return 20
+    else:
+        return 0
+
+def check_get_lost(astrolabe, compass, map):
+    chance = calculate_get_lost_chance(astrolabe, compass, map)
+    if random.randint(1, 100) <= chance:
+        print('Lost?')
+        return True
+    return False
+
+def display_lost_message(astrolabe, compass, map):
+    if astrolabe == 0 and map == 0:
+        message = "Did you really think you could have gotten home without an astrolabe and map?"
+    elif astrolabe == 0 and compass == 0:
+        message = "Lost without an astrolabe and compass? Better luck next time!" 
+    elif compass == 0 and map == 0:
+        message = "Navigating without a compass and map? That's a tough journey!"
+    else:
+        message = "Lost at sea! Better luck next time."
+    
+    text_surface = test_font.render(message, True, (255, 255, 255))  # White text
+    text_rect = text_surface.get_rect(center=(250, 300))
+    screen.blit(text_surface, text_rect)
+    pygame.display.flip()  # Update the display
+    pygame.time.delay(5000)
+    cannonballs = []
+    playercannonballs = [] 
+    display_restart_screen()
 
 # Initialize Pygame
 pygame.init()
 pygame.display.set_caption('APWorldGame')
 clock = pygame.time.Clock()
+global starttime
 starttime = 0
-
-
+global current_level
+current_level = 1
 
 # Set up the game window
 screen = pygame.display.set_mode((500, 600))
@@ -92,11 +266,12 @@ bg_music.set_volume(.6)
 
 
 game_active = False
-
-
+global level_scores
+level_scores = []  
+global cannonballs
 cannonballs = []
+global playercannonballs
 playercannonballs = []
-count = 0
 
 num_sails = 1
 player_money = 100
@@ -106,10 +281,12 @@ enemy_direction = 8
 hardness = 5
 player_speed = 5
 cannonball_speed = 8
+player_cannonball_speed = 5
 has_astrolabe = False
 has_compass = False
 has_map = False
-
+hull_thickness = 0
+hit = 0
 
 show_start_screen = True
 
@@ -160,20 +337,34 @@ while True:
                         player_speed += 3
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_2:
-                   has_astrolabe = True
-                   player_money -= 10
+                   if player_money >= 10:
+                        has_astrolabe = True
+                        player_money -= 10
                    
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_3:
-                   has_compass = True
-                   player_money -= 10
+                   if player_money >= 10:
+                        has_compass = True
+                        player_money -= 10
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_4:
-                   has_map = True
-                   player_money -= 10
+                   if player_money >= 10:
+                        has_map = True
+                        player_money -= 10
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_5:
+                   if player_money >= 15:
+                        player_cannonball_speed += 2
+                        player_money -= 15
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_6:
+                   if player_money >= 25:
+                        hull_thickness += 1
+                        player_money -= 25
 
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_s):
+                displaystart()
                 game_active = True
                 starttime = pygame.time.get_ticks() 
     
@@ -203,7 +394,7 @@ while True:
 
 
         for playercannonball_rect in playercannonballs:
-            playercannonball_rect.y -= cannonball_speed  # Change to -= to move upwards
+            playercannonball_rect.y -= player_cannonball_speed  # Change to -= to move upwards
             if playercannonball_rect.bottom < 0:
                 playercannonballs.pop(0)  # Remove when it goes above the screen
 
@@ -212,14 +403,23 @@ while True:
                 move_left = False
                 move_right = False
                 game_active = False
-            
+                if score_percent > 100:
+                    score_percent = 100
+                level_scores.append(score_percent)
+                # Transition to the next level
+                current_level += 1
+                hardness += 2  # Increase hardness for the next level
+                enemyspeed -= 2  # Increase enemy speed for the next level
+                enemyspeedp += 2
+                print(level_scores)
+                display_level_complete_screen(has_astrolabe, has_compass, has_map)
+
             screen.blit(cannonball_surface, playercannonball_rect)
 
         if random.randint(1, 100) < hardness:
             cannonball_rect = cannonball_surface.get_rect(midtop=(enemy_rect.midbottom[0], enemy_rect.midbottom[1] + 5))
             cannonballs.append(cannonball_rect)
             shoot_sound.play()
-            count += 1
         # Update and draw cannonballs
         for cannonball_rect in cannonballs:
             cannonball_rect.y += cannonball_speed
@@ -230,10 +430,24 @@ while True:
 
             if cannonball_rect.colliderect(player_rect):
                 cannonballs.remove(cannonball_rect)
-                move_left = False
-                move_right = False
-                game_active = False
-                kabir = 0
+                hit += 1
+                if hit > hull_thickness:
+                    move_left = False
+                    move_right = False
+                    enemyspeed = -8
+                    enemyspeedp = 8
+                    hardness = 5
+                    num_sails = 1
+                    player_speed = 5
+                    player_cannonball_speed = 5
+                    has_astrolabe = False
+                    has_compass = False
+                    has_map = False
+                    hull_thickness = 0
+                    player_money = 100
+                    game_active = False
+
+            
 
 
             # Remove cannonball when it leaves the screen
