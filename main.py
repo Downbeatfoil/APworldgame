@@ -44,6 +44,46 @@ def display_restart_screen():
     global current_level, level_scores
     current_level = 1
     level_scores = []
+    global instructioncount
+    instructioncount += 1
+    if instructioncount < 2:
+        print("""
+            Ahoy, brave sailor!
+            Welcome to the high seas, where danger lurks and adventure awaits!
+            Prepare yer ship for the treacherous journey ahead. Listen closely to these crucial instructions to navigate these waters:
+
+            1. Steering the Ship:
+            - To sail left, press the 'Left Arrow' key.
+            - To sail right, press the 'Right Arrow' key.
+
+            2. Firing Cannons:
+            - Ready yer cannons with the 'Spacebar' key.
+            - Beware, there be a cooldown after each shot, so aim true!
+
+            3. Upgrading Yer Ship:
+            - Spend yer hard-earned doubloons wisely!
+            - Press '1' to add sails and increase speed.
+            - Press '2' for an astrolabe, '3' for a compass, and '4' for a map.
+            - Enhance cannon power with '5' and reinforce the hull with '6'.
+
+            4. Facing Fearsome Foes:
+            - Face legendary pirates in each level.
+            - Defend against their cannon fire and strike them down to advance.
+
+            5. Getting Lost:
+            - Without navigation tools, ye risk getting lost at sea!
+            - Acquire astrolabes, compasses, and maps to stay on course.
+
+            6. Victory and Defeat:
+            - Beat Level 4 to claim victory and make it home with your riches!
+            - But beware, if yer ship takes too much damage, ye'll face defeat.
+
+            7. Enjoy the Journey:
+            - Revel in the pixelated beauty of the ocean.
+            - Embrace the challenge, and may the wind be ever in yer sails!
+
+            Press 'S' to set sail, and may the sea gods guide ye to glory! Arrr! 🏴‍☠️🌊⚓
+            """)    
 
     screen.blit(money_text, (10, 10))
     screen.blit(sails_text, (10, 50))
@@ -100,7 +140,7 @@ def display_level_complete_screen(astrolabe, compass, map):
 
             # Load and display the pirate image
             pirate_image = pygame.image.load('graphics/blackbeard.jpg').convert_alpha()
-            pirate_image = pygame.transform.scale(pirate_image, (150, 250))
+            pirate_image = pygame.transform.scale(pirate_image, (200, 250))
             pirate_rect = pirate_image.get_rect(center=(250, 420))
             screen.blit(pirate_image, pirate_rect)
 
@@ -124,7 +164,7 @@ def display_level_complete_screen(astrolabe, compass, map):
 
             # Load and display the pirate image
             pirate_image = pygame.image.load('graphics\IMG_6893.jpg').convert_alpha()
-            pirate_image = pygame.transform.scale(pirate_image, (150, 250))
+            pirate_image = pygame.transform.scale(pirate_image, (200, 250))
             pirate_rect = pirate_image.get_rect(center=(250, 420))
             screen.blit(pirate_image, pirate_rect)
 
@@ -223,9 +263,10 @@ def display_lost_message(astrolabe, compass, map):
     screen.fill('blue')
     screen.blit(text_surface, text_rect)
     print(message)
-    global enemyspeed, enemyspeedp, hardness, num_sails, player_speed, player_cannonball_speed, has_astrolabe, has_compass, has_map, hull_thickness, player_money
+    global enemyspeed, enemyspeedp, hardness, num_sails, player_speed, player_cannonball_speed, has_astrolabe, has_compass, has_map, hull_thickness, player_money, instructioncount
     enemyspeed = -8
     enemyspeedp = 8
+    instructioncount = 0
     hardness = 5
     num_sails = 1
     player_speed = 5
@@ -251,7 +292,8 @@ global starttime
 starttime = 0
 global current_level
 current_level = 1
-
+global instructioncount
+instructioncount = 0
 # Set up the game window
 screen = pygame.display.set_mode((500, 600))
 
@@ -464,7 +506,7 @@ while True:
                 cannonballs.remove(cannonball_rect)
                 hit += 1
                 if hit > hull_thickness:
-                    print('yo')
+                    instructioncount = 0
                     move_left = False
                     move_right = False
                     enemyspeed = -8
