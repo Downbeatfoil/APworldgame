@@ -32,11 +32,10 @@ def display_restart_screen():
     pygame.draw.rect(screen, (0, 0, 0), (85, 370, 330, 50))
     screen.blit(start_text, start_rect)
 
-    pygame.draw.rect(screen, (0, 0, 0), (0, 0, 350, 340))
+    pygame.draw.rect(screen, (0, 0, 0), (0, 0, 350, 300))
 
     money_text = test_font.render(f"Doubloons: {player_money}", True, (255, 255, 255))
     sails_text = test_font.render(f"Sails: {num_sails}", True, (255, 255, 255))
-    speed_text = test_font.render(f"Speed: {player_speed}", True, (255, 255, 255))
     astrolabe_text = test_font.render(f"Astrolabe: {'Yes' if has_astrolabe else 'No'}", True, (255, 255, 255))
     compass_text = test_font.render(f"Compass: {'Yes' if has_compass else 'No'}", True, (255, 255, 255))
     map_text = test_font.render(f"Map: {'Yes' if has_map else 'No'}", True, (255, 255, 255))
@@ -48,12 +47,11 @@ def display_restart_screen():
 
     screen.blit(money_text, (10, 10))
     screen.blit(sails_text, (10, 50))
-    screen.blit(speed_text, (10, 90))
-    screen.blit(astrolabe_text, (10, 130))
-    screen.blit(compass_text, (10, 170))
-    screen.blit(map_text, (10, 210))
-    screen.blit(cbspeed_text,(10, 250))
-    screen.blit(hull_text,(10, 290))
+    screen.blit(astrolabe_text, (10, 90))
+    screen.blit(compass_text, (10, 130))
+    screen.blit(map_text, (10, 170))
+    screen.blit(cbspeed_text,(10, 210))
+    screen.blit(hull_text,(10, 250))
 
     pygame.display.flip()
 
@@ -62,10 +60,10 @@ def display_level_complete_screen(astrolabe, compass, map):
     if check_get_lost(astrolabe, compass, map):
         display_lost_message(astrolabe, compass, map)
     else: 
-        level_complete_text = test_font.render(f"Get Ready For Level {current_level}", True, (255, 255, 255))
-        level_complete_rect = level_complete_text.get_rect(center=(250, 100))
-        screen.blit(level_complete_text, level_complete_rect)
-        level_scores = [] 
+        if current_level != 5:
+            level_complete_text = test_font.render(f"Get Ready For Level {current_level}", True, (255, 255, 255))
+            level_complete_rect = level_complete_text.get_rect(center=(250, 100))
+            screen.blit(level_complete_text, level_complete_rect)
         if current_level ==2:
             pirate_text = test_font.render(
             "You will fight Captain Kidd",
@@ -145,13 +143,16 @@ def display_level_complete_screen(astrolabe, compass, map):
             )
             pirate_rect = pirate_text.get_rect(center=(250, 250))
             screen.blit(pirate_text, pirate_rect)
+            global level_scores
             avgscore = mean(level_scores)
             avg_text = test_font.render(f"Average Score: {avgscore}", True, (255, 255, 255))
             avg_rect = avg_text.get_rect(center=(250, 300))
             screen.blit(avg_text, avg_rect)
 
             pygame.display.flip()
-
+            pygame.time.delay(8000)
+            pygame.quit()
+            exit()
 
 def displaystart():
     screen.fill((0, 0, 255))  # Change the background color to blue
@@ -202,12 +203,13 @@ def calculate_get_lost_chance(astrolabe, compass, map):
 def check_get_lost(astrolabe, compass, map):
     chance = calculate_get_lost_chance(astrolabe, compass, map)
     if random.randint(1, 100) <= chance:
-        print('Lost?')
         return True
     return False
 
 def display_lost_message(astrolabe, compass, map):
-    if astrolabe == 0 and map == 0:
+    if astrolabe == 0 and map == 0 and compass == 0:
+        message = "No Navigation Tools? Rethink your finances..."
+    elif astrolabe == 0 and map == 0:
         message = "Did you really think you could have gotten home without an astrolabe and map?"
     elif astrolabe == 0 and compass == 0:
         message = "Lost without an astrolabe and compass? Better luck next time!" 
@@ -215,14 +217,17 @@ def display_lost_message(astrolabe, compass, map):
         message = "Navigating without a compass and map? That's a tough journey!"
     else:
         message = "Lost at sea! Better luck next time."
-    
-    text_surface = test_font.render(message, True, (255, 255, 255))  # White text
+    real = 'You Got Lost!'
+    text_surface = test_font.render(real, True, (255, 255, 255))  # White text
     text_rect = text_surface.get_rect(center=(250, 300))
+    screen.fill('blue')
     screen.blit(text_surface, text_rect)
+    print(message)
     pygame.display.flip()  # Update the display
     pygame.time.delay(5000)
     cannonballs = []
-    playercannonballs = [] 
+    playercannonballs = []
+     
     display_restart_screen()
 
 # Initialize Pygame
@@ -334,24 +339,27 @@ while True:
                     if player_money >= 10:  # Assuming the cost to subtract is 10 money units
                         player_money -= 10
                         num_sails += 1
-                        player_speed += 3
+                        player_speed += 5
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_2:
                    if player_money >= 10:
-                        has_astrolabe = True
-                        player_money -= 10
+                        if not has_astrolabe:
+                            has_astrolabe = True
+                            player_money -= 10
                    
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_3:
                    if player_money >= 10:
-                        has_compass = True
-                        player_money -= 10
+                        if not has_compass:
+                            has_compass = True
+                            player_money -= 10
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_4:
                    if player_money >= 10:
-                        has_map = True
-                        player_money -= 10
+                        if not has_map:
+                            has_map = True
+                            player_money -= 10
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_5:
                    if player_money >= 15:
@@ -409,8 +417,8 @@ while True:
                 # Transition to the next level
                 current_level += 1
                 hardness += 2  # Increase hardness for the next level
-                enemyspeed -= 2  # Increase enemy speed for the next level
-                enemyspeedp += 2
+                enemyspeed -= 4  # Increase enemy speed for the next level
+                enemyspeedp += 4
                 print(level_scores)
                 display_level_complete_screen(has_astrolabe, has_compass, has_map)
 
