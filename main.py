@@ -75,8 +75,8 @@ def display_level_complete_screen(astrolabe, compass, map):
             screen.blit(pirate_text, pirate_rect)
 
             # Load and display the pirate image
-            pirate_image = pygame.image.load('graphics\john-calico-jack-rackham-1680-1720-print-collector.jpg').convert_alpha()
-            pirate_image = pygame.transform.scale(pirate_image, (150, 250))
+            pirate_image = pygame.image.load('graphics\captain-william-kidd-privateer-and-pirate-shanina-conway.jpg').convert_alpha()
+            pirate_image = pygame.transform.scale(pirate_image, (180, 250))
             pirate_rect = pirate_image.get_rect(center=(250, 420))
             screen.blit(pirate_image, pirate_rect)
 
@@ -99,7 +99,7 @@ def display_level_complete_screen(astrolabe, compass, map):
             screen.blit(pirate_text, pirate_rect)
 
             # Load and display the pirate image
-            pirate_image = pygame.image.load('graphics\john-calico-jack-rackham-1680-1720-print-collector.jpg').convert_alpha()
+            pirate_image = pygame.image.load('graphics/blackbeard.jpg').convert_alpha()
             pirate_image = pygame.transform.scale(pirate_image, (150, 250))
             pirate_rect = pirate_image.get_rect(center=(250, 420))
             screen.blit(pirate_image, pirate_rect)
@@ -123,7 +123,7 @@ def display_level_complete_screen(astrolabe, compass, map):
             screen.blit(pirate_text, pirate_rect)
 
             # Load and display the pirate image
-            pirate_image = pygame.image.load('graphics\john-calico-jack-rackham-1680-1720-print-collector.jpg').convert_alpha()
+            pirate_image = pygame.image.load('graphics\IMG_6893.jpg').convert_alpha()
             pirate_image = pygame.transform.scale(pirate_image, (150, 250))
             pirate_rect = pirate_image.get_rect(center=(250, 420))
             screen.blit(pirate_image, pirate_rect)
@@ -184,7 +184,6 @@ def displaystart():
 
 def reset_game_state():
     global game_active, hit, cannonballs, playercannonballs
-    hit = 0
     cannonballs = []
     playercannonballs = []
     game_active = True
@@ -217,14 +216,28 @@ def display_lost_message(astrolabe, compass, map):
         message = "Navigating without a compass and map? That's a tough journey!"
     else:
         message = "Lost at sea! Better luck next time."
+    
     real = 'You Got Lost!'
     text_surface = test_font.render(real, True, (255, 255, 255))  # White text
     text_rect = text_surface.get_rect(center=(250, 300))
     screen.fill('blue')
     screen.blit(text_surface, text_rect)
     print(message)
+    global enemyspeed, enemyspeedp, hardness, num_sails, player_speed, player_cannonball_speed, has_astrolabe, has_compass, has_map, hull_thickness, player_money
+    enemyspeed = -8
+    enemyspeedp = 8
+    hardness = 5
+    num_sails = 1
+    player_speed = 5
+    player_cannonball_speed = 5
+    has_astrolabe = False
+    has_compass = False
+    has_map = False
+    hull_thickness = 0
+    player_money = 100
     pygame.display.flip()  # Update the display
     pygame.time.delay(5000)
+    global cannonballs, playercannonballs
     cannonballs = []
     playercannonballs = []
      
@@ -278,18 +291,29 @@ cannonballs = []
 global playercannonballs
 playercannonballs = []
 
+global num_sails
 num_sails = 1
+global player_money
 player_money = 100
+global enemyspeed
 enemyspeed = -8
+global enemyspeedp
 enemyspeedp = 8
 enemy_direction = 8
+global hardness
 hardness = 5
+global player_speed
 player_speed = 5
 cannonball_speed = 8
+global player_cannonball_speed
 player_cannonball_speed = 5
+global has_astrolabe
 has_astrolabe = False
+global has_compass
 has_compass = False
+global has_map
 has_map = False
+global hull_thickness
 hull_thickness = 0
 hit = 0
 
@@ -367,9 +391,9 @@ while True:
                         player_money -= 15
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_6:
-                   if player_money >= 25:
+                   if player_money >= 20:
                         hull_thickness += 1
-                        player_money -= 25
+                        player_money -= 20
 
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_s):
                 displaystart()
@@ -440,6 +464,7 @@ while True:
                 cannonballs.remove(cannonball_rect)
                 hit += 1
                 if hit > hull_thickness:
+                    print('yo')
                     move_left = False
                     move_right = False
                     enemyspeed = -8
@@ -453,6 +478,7 @@ while True:
                     has_map = False
                     hull_thickness = 0
                     player_money = 100
+                    hit = 0
                     game_active = False
 
             
