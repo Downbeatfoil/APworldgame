@@ -48,42 +48,42 @@ def display_restart_screen():
     instructioncount += 1
     if instructioncount < 2:
         print("""
-            Ahoy, brave sailor!
-            Welcome to the high seas, where danger lurks and adventure awaits!
-            Prepare yer ship for the treacherous journey ahead. Listen closely to these crucial instructions to navigate these waters:
+        Ahoy, brave sailor!
+        Welcome to the high seas, where danger lurks and adventure awaits!
+        Prepare yer ship for the treacherous journey ahead. Listen closely to these crucial instructions to navigate these waters:
 
-            1. Steering the Ship:
-            - To sail left, press the 'Left Arrow' key.
-            - To sail right, press the 'Right Arrow' key.
+        1. Steering the Ship:
+        - To sail left, press the 'Left Arrow' key.
+        - To sail right, press the 'Right Arrow' key.
 
-            2. Firing Cannons:
-            - Ready yer cannons with the 'Spacebar' key.
-            - Beware, there be a cooldown after each shot, so aim true!
+        2. Firing Cannons:
+        - Ready yer cannons with the 'Spacebar' key.
+        - Beware, there be a cooldown after each shot, so aim true!
 
-            3. Upgrading Yer Ship:
-            - Spend yer hard-earned doubloons wisely!
-            - Press '1' to add sails and increase speed.
-            - Press '2' for an astrolabe, '3' for a compass, and '4' for a map.
-            - Enhance cannon power with '5' and reinforce the hull with '6'.
+        3. Upgrading Yer Ship:
+        - Spend yer hard-earned doubloons wisely!
+        - Press '1' to add sails and increase speed.
+        - Press '2' for an astrolabe, '3' for a compass, and '4' for a map.
+        - Enhance cannon power with '5' and reinforce the hull with '6'.
 
-            4. Facing Fearsome Foes:
-            - Face legendary pirates in each level.
-            - Defend against their cannon fire and strike them down to advance.
+        4. Facing Fearsome Foes:
+        - Face legendary pirates in each level.
+        - Defend against their cannon fire and strike them down to advance.
 
-            5. Getting Lost:
-            - Without navigation tools, ye risk getting lost at sea!
-            - Acquire astrolabes, compasses, and maps to stay on course.
+        5. Getting Lost:
+        - Without navigation tools, ye risk getting lost at sea!
+        - Acquire astrolabes, compasses, and maps to stay on course.
 
-            6. Victory and Defeat:
-            - Beat Level 4 to claim victory and make it home with your riches!
-            - But beware, if yer ship takes too much damage, ye'll face defeat.
+        6. Victory and Defeat:
+        - Beat Level 4 to claim victory and make it home with your riches!
+        - But beware, if yer ship takes too much damage, ye'll face defeat.
 
-            7. Enjoy the Journey:
-            - Revel in the pixelated beauty of the ocean.
-            - Embrace the challenge, and may the wind be ever in yer sails!
+        7. Enjoy the Journey:
+        - Revel in the pixelated beauty of the ocean.
+        - Embrace the challenge, and may the wind be ever in yer sails!
 
-            Press 'S' to set sail, and may the sea gods guide ye to glory! Arrr! 🏴‍☠️🌊⚓
-            """)    
+        Press 'S' to set sail, and may the sea gods guide ye to glory! Arrr! 🏴‍☠️🌊⚓
+        """)    
 
     screen.blit(money_text, (10, 10))
     screen.blit(sails_text, (10, 50))
